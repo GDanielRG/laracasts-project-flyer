@@ -1,4 +1,6 @@
-<?php namespace App\Http\Utilities;
+<?php
+
+namespace App\Http\Utilities;
 
 class Country
 {
