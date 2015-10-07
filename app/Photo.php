@@ -8,6 +8,11 @@ class Photo extends Model
 {
     protected $table = 'flyer_photos';
 
+    /**
+     * Fillable fields for a photo.
+     *
+     * @var array
+     */
     protected $fillable = ['photo'];
 
     /**
