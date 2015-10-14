@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Project Flyer</title>
-    <link href="/css/app.css" rel="stylesheet" type="text/css">
-    <link href="/css/libs.css" rel="stylesheet" type="text/css">
+    <link href="/css/app.css" rel="stylesheet">
+    <link href="/css/libs.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/dropzone.css" rel="stylesheet">
 </head>
 <body>
 
@@ -34,6 +35,7 @@
 </div>
 
 <script src="/js/libs.js"></script>
+@yield('scripts.footer')
 
 @include('flash')
 
