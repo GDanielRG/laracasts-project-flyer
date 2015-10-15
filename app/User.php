@@ -48,4 +48,24 @@ class User extends Model implements AuthenticatableContract,
         return $relation->user_id == $this->id;
     }
 
+    /**
+     * User has many flyers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function flyers()
+    {
+        return $this->hasMany(Flyer::class);
+    }
+
+    /**
+     * Publish a flyer.
+     *
+     * @param Flyer $flyer
+     */
+    public function publish(Flyer $flyer)
+    {
+        $this->flyers()->save($flyer);
+    }
+
 }

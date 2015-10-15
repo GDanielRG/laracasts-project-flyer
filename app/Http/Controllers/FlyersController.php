@@ -3,19 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Flyer;
-use App\Photo;
-use App\Http\Flash;
 use Illuminate\Http\Request;
 use App\Http\Requests\FlyerRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddPhotoRequest; //AUTHORIZATION OPTION 2
-//use App\Http\Controllers\Traits\AuthorizesUsers; //AUTHORIZATION OPTION 1
-//use Symfony\Component\HttpFoundation\File\UploadedFile; //AUTHORIZATION OPTION 1
 
 class FlyersController extends Controller
 {
-//    use AuthorizesUsers; //AUTHORIZATION OPTION 1
-
     /**
      * Create a new FlyersController instance.
      */
@@ -50,16 +43,17 @@ class FlyersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param FlyerRequest $request
-     * @param Flash $flash
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(FlyerRequest $request, Flash $flash)
+    public function store(FlyerRequest $request)
     {
-        Flyer::create($request->all());
+        $flyer = $this->user->publish(
+            new Flyer($request->all())
+        );
 
         flash()->success('Success!', 'Your flyer has been created.');
 
-        return redirect()->back();
+        return redirect(flyer_path($flyer));
     }
 
     /**
@@ -75,61 +69,6 @@ class FlyersController extends Controller
 
         return view('flyers.show', compact('flyer'));
     }
-
-    /**
-     * AUTHORIZATION OPTION 1: Extract authorization process to trait
-     *
-     * Add a photo to the flyer.
-     *
-     * @param string $zip
-     * @param string $street
-     * @param Request $request
-     * @return Flyer
-     */
-//    public function addPhoto($zip, $street, Request $request)
-//    {
-//        $this->validate($request, [
-//            'photo' => 'required|mimes:jpg,jpeg,png,bmp'
-//        ]);
-//
-//        if (!$this->userCreatedFlyer($request)) {
-//            return $this->unauthorized($request);
-//        }
-//
-//        $photo = $this->makePhoto($request->file('photo'));
-//
-//        Flyer::locatedAt($zip, $street)->addPhoto($photo);
-//    }
-
-    /**
-     * AUTHORIZATION OPTION 2: Create a form request
-     *
-     * Add a photo to the flyer.
-     *
-     * @param string $zip
-     * @param string $street
-     * @param ChangeFlyerRequest $request
-     */
-    public function addPhoto($zip, $street, AddPhotoRequest $request)
-    {
-        $photo = Photo::fromFile($request->file('photo'));
-
-        Flyer::locatedAt($zip, $street)->addPhoto($photo);
-    }
-
-    /**
-     * AUTHORIZATION OPTION 1
-     *
-     * Setup a new photo.
-     *
-     * @param UploadedFile $file
-     * @return Photo
-     */
-//    public function makePhoto(UploadedFile $file)
-//    {
-//        return Photo::named($file->getClientOriginalName())
-//            ->move($file);
-//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -164,4 +103,5 @@ class FlyersController extends Controller
     {
         //
     }
+
 }

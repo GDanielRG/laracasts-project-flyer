@@ -1,13 +1,15 @@
-<?php namespace App\Http;
+<?php
 
-class Flash {
+namespace App\Http;
 
+class Flash
+{
     /**
      * Create a flash message.
      *
-     * @param $title
-     * @param $message
-     * @param $level
+     * @param string $title
+     * @param string $message
+     * @param string $level
      * @param string $key
      * @return void
      */
@@ -23,8 +25,8 @@ class Flash {
     /**
      * Create an information flash message.
      *
-     * @param $title
-     * @param $message
+     * @param string $title
+     * @param string $message
      * @return void
      */
     public function info($title, $message)
@@ -35,8 +37,8 @@ class Flash {
     /**
      * Create a success flash message.
      *
-     * @param $title
-     * @param $message
+     * @param string $title
+     * @param string $message
      * @return void
      */
     public function success($title, $message)
@@ -47,8 +49,8 @@ class Flash {
     /**
      * Create a warning flash message.
      *
-     * @param $title
-     * @param $message
+     * @param string $title
+     * @param string $message
      * @return void
      */
     public function warning($title, $message)
@@ -59,8 +61,8 @@ class Flash {
     /**
      * Create an error flash message.
      *
-     * @param $title
-     * @param $message
+     * @param string $title
+     * @param string $message
      * @return void
      */
     public function error($title, $message)
@@ -71,8 +73,8 @@ class Flash {
     /**
      * Create an overlay flash message.
      *
-     * @param $title
-     * @param $message
+     * @param string $title
+     * @param string $message
      * @return void
      */
     public function overlay($title, $message, $level = 'success')

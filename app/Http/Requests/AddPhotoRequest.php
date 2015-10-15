@@ -5,9 +5,6 @@ namespace App\Http\Requests;
 use App\Flyer;
 use App\Http\Requests\Request;
 
-/**
- * AUTHORIZATION OPTION 2
- */
 class AddPhotoRequest extends Request
 {
     /**
@@ -35,4 +32,5 @@ class AddPhotoRequest extends Request
             'photo' => 'required|mimes:jpg,jpeg,png,bmp'
         ];
     }
+
 }

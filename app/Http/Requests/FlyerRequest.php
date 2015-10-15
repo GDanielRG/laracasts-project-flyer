@@ -33,4 +33,5 @@ class FlyerRequest extends Request
             'description' => 'required',
         ];
     }
+
 }

@@ -21,10 +21,21 @@ function flash($title = null, $message = null)
 /**
  * Form action path for adding photos.
  *
- * @param $flyer
+ * @param \App\Flyer $flyer
  * @return string
  */
-function add_photo_path($flyer)
+function add_photo_path(App\Flyer $flyer)
 {
     return route('store_photo_path', [$flyer->zip, $flyer->street]);
+}
+
+/**
+ * The path to a given flyer.
+ *
+ * @param App\Flyer $flyer
+ * @return string
+ */
+function flyer_path (App\Flyer $flyer)
+{
+    return $flyer->zip . '/' . str_replace(' ', '-', $flyer->street);
 }
