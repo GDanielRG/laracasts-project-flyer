@@ -11,4 +11,5 @@ class FlyersControllerTest extends TestCase
     {
         $this->visit('flyers/create');
     }
+
 }
