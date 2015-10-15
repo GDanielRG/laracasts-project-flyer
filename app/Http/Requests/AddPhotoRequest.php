@@ -8,7 +8,7 @@ use App\Http\Requests\Request;
 /**
  * AUTHORIZATION OPTION 2
  */
-class ChangeFlyerRequest extends Request
+class AddPhotoRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

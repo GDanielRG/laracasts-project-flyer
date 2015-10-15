@@ -36,4 +36,16 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    /**
+     * Does the user owns the relation model.
+     *
+     * @param $relation
+     * @return bool
+     */
+    public function owns($relation)
+    {
+        return $relation->user_id == $this->id;
+    }
+
 }

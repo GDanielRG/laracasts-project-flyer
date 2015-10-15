@@ -8,14 +8,41 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Photo extends Model
 {
+    /**
+     * The associated table.
+     *
+     * @var string
+     */
     protected $table = 'flyer_photos';
 
+    /**
+     * Fillable fields for a photo.
+     *
+     * @var array
+     */
     protected $fillable = ['path', 'name', 'thumbnail_path'];
 
-    protected $baseDir = 'uploads/flyers';
+    /**
+     * The UploadedFile instance.
+     *
+     * @var UploadedFile
+     */
+    protected $file;
 
     /**
-     * A flyer belongs to photo.
+     * When a photo is created, prepare a thumbnail too.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        static::creating(function($photo) {
+            return $photo->upload();
+        });
+    }
+
+    /**
+     * A photo belongs to a flyer.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -25,39 +52,94 @@ class Photo extends Model
     }
 
     /**
-     * Build a new photo instance from a file upload.
+     * Make a new photo instance from an uploaded file.
      *
-     * @param string $name
+     * @param UploadedFile $file
      * @return self
      */
-    public static function named($name)
+    public static function fromFile(UploadedFile $file)
     {
-        return (new static)->saveAs($name);
+        $photo = new static;
+
+        $photo->file = $file;
+
+        return $photo->fill([
+            'name' => $photo->fileName(),
+            'path' => $photo->filePath(),
+            'thumbnail_path' => $photo->thumbnailPath()
+        ]);
     }
 
-    protected function saveAs($name)
+    /**
+     * Get the base directory for photo uploads.
+     *
+     * @return string
+     */
+    public function baseDir()
     {
-        $this->name = sprintf("%s-%s", time(), $name);
-        $this->path = sprintf("%s/%s", $this->baseDir, $this->name);
-        $this->thumbnail_path = sprintf("%s/tn-%s", $this->baseDir, $this->name);
-
-        return $this;
+        return 'uploads/flyers';
     }
 
-    public function move(UploadedFile $file)
+    /**
+     * Get the filename for the photo.
+     *
+     * @return string
+     */
+    public function fileName()
     {
-        $file->move($this->baseDir, $this->name);
+        $name = sha1(
+            time() . $this->file->getClientOriginalName()
+        );
+
+        $extension = $this->file->getClientOriginalExtension();
+
+        return "{$name}.{$extension}";
+    }
+
+    /**
+     * Get the path to the photo.
+     *
+     * @return string
+     */
+    public function filePath()
+    {
+        return $this->baseDir() . '/' . $this->fileName();
+    }
+
+    /**
+     * Get the path to the photo's thumbnail.
+     *
+     * @return string
+     */
+    public function thumbnailPath()
+    {
+        return $this->baseDir() . '/tn-' . $this->fileName();
+    }
+
+    /**
+     * Move the photo to the proper folder.
+     *
+     * @return self
+     */
+    public function upload()
+    {
+        $this->file->move($this->baseDir(), $this->fileName());
 
         $this->makeThumbnail();
 
         return $this;
     }
 
+    /**
+     * Create a thumbnail for the photo.
+     *
+     * @return void
+     */
     public function makeThumbnail()
     {
-        Image::make($this->path)
+        Image::make($this->filePath())
             ->fit(200)
-            ->save($this->thumbnail_path);
+            ->save($this->thumbnailPath());
     }
 
 }

@@ -17,3 +17,14 @@ function flash($title = null, $message = null)
 
     return $flash->info($title, $message);
 }
+
+/**
+ * Form action path for adding photos.
+ *
+ * @param $flyer
+ * @return string
+ */
+function add_photo_path($flyer)
+{
+    return route('store_photo_path', [$flyer->zip, $flyer->street]);
+}
