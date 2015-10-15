@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <h1>{!! $flyer->street !!}</h1>
             <h2>{!! $flyer->price !!}</h2>
 
@@ -12,9 +12,15 @@
             <div class="description">{!! nl2br($flyer->description) !!}</div>
         </div>
 
-        <div class="col-md-9">
-            @foreach($flyer->photos as $photo)
-                <img src="/{{ $photo->path }}" alt="">
+        <div class="col-md-8 gallery">
+            @foreach($flyer->photos->chunk(4) as $set)
+                <div class="row">
+                    @foreach($set as $photo)
+                        <div class="col-md-3 gallery__image">
+                            <img src="/{{ $photo->thumbnail_path }}" alt="">
+                        </div>
+                    @endforeach
+                </div>
             @endforeach
         </div>
     </div>
@@ -36,8 +42,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.2.0/dropzone.js"></script>
     <script>
         Dropzone.options.addPhotosForm = {
-            paramName: "photo", // The name that will be used to transfer the file
-            maxFilesize: 3, // MB
+            paramName: "photo",
+            maxFilesize: 10,
+            maxFiles: 10,
             acceptedFiles: ".jpg,.jpeg,.png,.bmp"
         };
     </script>
